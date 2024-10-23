@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=CefGlue.Demo.Avalonia
+Type=Application
+Exec=/usr/share/CefGlue.Demo.Avalonia/CefGlue.Demo.Avalonia
+Icon=/usr/share/icons/icon.png
