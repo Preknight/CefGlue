@@ -28,7 +28,7 @@
   <ItemGroup>
     <PackageReference Include="System.Runtime.Loader" />
   </ItemGroup>
-
+  
   <Target Name="Editbin" AfterTargets="Compile">
     <!--
       Quick explanation: This target runs after compile, and currently 3 more times for each MSBuild command executed in the next target "PublishApp".
@@ -53,6 +53,7 @@
   </Target>
 
   <Target Name="PublishApp" AfterTargets="AfterBuild" Condition="'$(_AssemblyTimestampBeforeCompile)' != '$(_AssemblyTimestampAfterCompile)' and '$(IsPublishing)' != 'True'">
+
     <!-- WINDOWS -->
     <Message Text="Publishing CefGlue.BrowserProcess on Windows ($(Platform))..." Importance="High" />
     <MSBuild Projects="CefGlue.BrowserProcess.csproj" Targets="Publish" Properties="$(PublishCommonConfig)win-$(ArchitectureConfig);IsEditbinEnabled=True;" />
@@ -60,7 +61,7 @@
     <!-- LINUX -->
     <Message Text="Publishing CefGlue.BrowserProcess on Linux ($(Platform))..." Importance="High" />
     <MSBuild Projects="CefGlue.BrowserProcess.csproj" Targets="Publish" Properties="$(PublishCommonConfig)linux-$(ArchitectureConfig);IsEditbinEnabled=False;" />
-
+    
     <!-- OSX -->
     <Message Text="Publishing CefGlue.BrowserProcess on MacOS ($(Platform))..." Importance="High" />
     <MSBuild Projects="CefGlue.BrowserProcess.csproj" Targets="Publish" Properties="$(PublishCommonConfig)osx-$(ArchitectureConfig);IsEditbinEnabled=False;" />
