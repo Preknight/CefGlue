@@ -9,6 +9,7 @@
             https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#controlling-dependency-assets
             https://github.com/dotnet/sdk/issues/11803
         -->
+
     <PackageReference>
       <PrivateAssets>$(PrivateAssets);compile</PrivateAssets>
     </PackageReference>
@@ -41,3 +42,4 @@
     <PackageVersion Include="NLog" Version="4.6.2" />
   </ItemGroup>
 </Project>
+

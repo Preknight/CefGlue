@@ -1,8 +1,10 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using Avalonia;
 using Xilium.CefGlue.Common;
 using Xilium.CefGlue.Common.Shared;
@@ -18,15 +20,14 @@ namespace Xilium.CefGlue.Demo.Avalonia
 
             AppDomain.CurrentDomain.ProcessExit += delegate { Cleanup(cachePath); };
 
+
             AppBuilder.Configure<App>()
                       .UsePlatformDetect()
-                      .With(new Win32PlatformOptions()
-                      {
-                          // CompositionMode = new [] { Win32CompositionMode.WinUIComposition }
-                      })
+                      .With(new Win32PlatformOptions())
                       .AfterSetup(_ => CefRuntimeLoader.Initialize(new CefSettings() {
                           RootCachePath = cachePath,
 #if WINDOWLESS
+
                           WindowlessRenderingEnabled = true
 #else
                           WindowlessRenderingEnabled = false
@@ -71,6 +72,14 @@ namespace Xilium.CefGlue.Demo.Avalonia
             }
             catch (IOException)
             {
+            try {
+                var dirInfo = new DirectoryInfo(cachePath);
+                if (dirInfo.Exists) {
+                    dirInfo.Delete(true);
+                }
+            } catch (UnauthorizedAccessException) {
+                // ignore
+            } catch (IOException) {
                 // ignore
             }
         }

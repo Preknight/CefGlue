@@ -88,6 +88,7 @@ namespace Xilium.CefGlue.Common
 #endif
                 flags = (flags ?? []).Append(KeyValuePair.Create("disable-features", "FirstPartySets")).ToArray();
             }
+
             CefRuntime.Initialize(new CefMainArgs(new[] { exeFileName }), settings, new BrowserCefApp(customSchemes, flags, browserProcessHandler), IntPtr.Zero);
 
             if (customSchemes != null)
