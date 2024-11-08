@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Avalonia;
@@ -12,6 +14,10 @@ namespace Xilium.CefGlue.Demo.Avalonia
 
         static int Main(string[] args)
         {
+            var cachePath = Path.Combine(Path.GetTempPath(), "CefGlue_" + Guid.NewGuid().ToString().Replace("-", null));
+
+            AppDomain.CurrentDomain.ProcessExit += delegate { Cleanup(cachePath); };
+
             AppBuilder.Configure<App>()
                       .UsePlatformDetect()
                       .With(new Win32PlatformOptions()
@@ -19,6 +25,7 @@ namespace Xilium.CefGlue.Demo.Avalonia
                           // CompositionMode = new [] { Win32CompositionMode.WinUIComposition }
                       })
                       .AfterSetup(_ => CefRuntimeLoader.Initialize(new CefSettings() {
+                          RootCachePath = cachePath,
 #if WINDOWLESS
                           WindowlessRenderingEnabled = true
 #else
@@ -44,6 +51,28 @@ namespace Xilium.CefGlue.Demo.Avalonia
                       .StartWithClassicDesktopLifetime(args);
                       
             return 0;
+        }
+
+        private static void Cleanup(string cachePath)
+        {
+            CefRuntime.Shutdown(); // must shutdown cef to free cache files (so that cleanup is able to delete files)
+
+            try
+            {
+                var dirInfo = new DirectoryInfo(cachePath);
+                if (dirInfo.Exists)
+                {
+                    dirInfo.Delete(true);
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // ignore
+            }
+            catch (IOException)
+            {
+                // ignore
+            }
         }
     }
 }
