@@ -1,5 +1,5 @@
-
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +24,8 @@ namespace Xilium.CefGlue.Demo.Avalonia
             AppBuilder.Configure<App>()
                       .UsePlatformDetect()
                       .With(new Win32PlatformOptions())
-                      .AfterSetup(_ => CefRuntimeLoader.Initialize(new CefSettings() {
+                      .AfterSetup(_ => CefRuntimeLoader.Initialize(new CefSettings()
+                      {
                           RootCachePath = cachePath,
 #if WINDOWLESS
 
@@ -34,10 +35,10 @@ namespace Xilium.CefGlue.Demo.Avalonia
 #endif
                           ,
                           //BackgroundColor = new CefColor(0x00, 0xff, 0xff, 0xff),
-                          Locale="zh-CN",
+                          Locale = "zh-CN",
 
                       },
-                      flags:new Dictionary<string, string> {
+                      flags: new Dictionary<string, string> {
                           {"--ignore-urlfetcher-cert-requests", "1" },
                           {"--ignore-certificate-errors", "1" },
                           {"--disable-web-security", "1" }
@@ -50,7 +51,7 @@ namespace Xilium.CefGlue.Demo.Avalonia
                         }
                       }))
                       .StartWithClassicDesktopLifetime(args);
-                      
+
             return 0;
         }
 
@@ -72,15 +73,22 @@ namespace Xilium.CefGlue.Demo.Avalonia
             }
             catch (IOException)
             {
-            try {
-                var dirInfo = new DirectoryInfo(cachePath);
-                if (dirInfo.Exists) {
-                    dirInfo.Delete(true);
+                try
+                {
+                    var dirInfo = new DirectoryInfo(cachePath);
+                    if (dirInfo.Exists)
+                    {
+                        dirInfo.Delete(true);
+                    }
                 }
-            } catch (UnauthorizedAccessException) {
-                // ignore
-            } catch (IOException) {
-                // ignore
+                catch (UnauthorizedAccessException)
+                {
+                    // ignore
+                }
+                catch (IOException)
+                {
+                    // ignore
+                }
             }
         }
     }
