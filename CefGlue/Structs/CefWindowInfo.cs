@@ -183,7 +183,7 @@
 
         public void SetAsWindowless(IntPtr parentHandle, bool transparent)
         {
-            WindowlessRenderingEnabled = true;
+            WindowlessRenderingEnabled = transparent;
             ParentHandle = parentHandle;
         }
     }

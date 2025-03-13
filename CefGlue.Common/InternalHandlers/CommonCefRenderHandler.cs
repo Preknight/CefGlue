@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+
 using Xilium.CefGlue.Common.Helpers.Logger;
 
 namespace Xilium.CefGlue.Common.InternalHandlers
@@ -58,6 +60,7 @@ namespace Xilium.CefGlue.Common.InternalHandlers
 
         protected override void OnAcceleratedPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects, IntPtr sharedHandle)
         {
+            Debug.WriteLine("加速绘制");
         }
 
         protected override void OnPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects, IntPtr buffer, int width, int height)

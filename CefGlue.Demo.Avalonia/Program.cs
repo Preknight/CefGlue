@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 
 using Avalonia;
+using Avalonia.Vulkan;
 using Xilium.CefGlue.Common;
 using Xilium.CefGlue.Common.Shared;
 
@@ -23,7 +24,11 @@ namespace Xilium.CefGlue.Demo.Avalonia
 
             AppBuilder.Configure<App>()
                       .UsePlatformDetect()
-                      .With(new Win32PlatformOptions())
+                      .With(new Win32PlatformOptions()
+                      {
+                          RenderingMode = new[]{Win32RenderingMode.Vulkan}
+                      })
+                       .With(new X11PlatformOptions() { RenderingMode = new[] { X11RenderingMode.Vulkan } })
                       .AfterSetup(_ => CefRuntimeLoader.Initialize(new CefSettings()
                       {
                           RootCachePath = cachePath,
@@ -34,7 +39,8 @@ namespace Xilium.CefGlue.Demo.Avalonia
                           WindowlessRenderingEnabled = false
 #endif
                           ,
-                          //BackgroundColor = new CefColor(0x00, 0xff, 0xff, 0xff),
+                          //BackgroundColor = new CefColor(0xff, 0xff, 0xff, 0),//A通道只支持255
+                          NoSandbox = true,
                           Locale = "zh-CN",
 
                       },

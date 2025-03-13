@@ -8,9 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Avalonia;
+using oriA=Avalonia;
 using Xilium.CefGlue.Avalonia;
 using Xilium.CefGlue.Common.Handlers;
+using System.Diagnostics;
 
 namespace Xilium.CefGlue.Demo.Avalonia
 {
@@ -28,7 +29,7 @@ namespace Xilium.CefGlue.Demo.Avalonia
             settings.BackgroundColor = new CefColor(0x00, 0xff, 0xff, 0xff);
 
             browser = new AvaloniaCefBrowser();
-            browser.Address = "http://www.bing.com";
+            browser.Address = "https://10.19.185.49/";
             browser.RegisterJavascriptObject(new BindingTestClass(), "boundBeforeLoadObject");
             browser.LoadStart += OnBrowserLoadStart;
             browser.TitleChanged += OnBrowserTitleChanged;
@@ -196,7 +197,7 @@ namespace Xilium.CefGlue.Demo.Avalonia
                     {
                         bounds.Height = 600;
                     }
-                    window.Position = new PixelPoint(bounds.X, bounds.Y);
+                    window.Position = new oriA.PixelPoint(bounds.X, bounds.Y);
                     window.Height = bounds.Height;
                     window.Width = bounds.Width;
                     window.Title = targetUrl;
@@ -205,5 +206,21 @@ namespace Xilium.CefGlue.Demo.Avalonia
                 return true;
             }
         }
+
+        private void DockPanel_PointerPressed(object? sender, oriA.Input.PointerPressedEventArgs e)
+        {
+            Debug.WriteLine("点击到Dock");
+        }
+
+        private void Grid_PointerPressed(object? sender, oriA.Input.PointerPressedEventArgs e)
+        {
+            Debug.WriteLine("点击到Grid");
+        }
+
+        private void Border_PointerPressed(object? sender, oriA.Input.PointerPressedEventArgs e)
+        {
+            Debug.WriteLine("点击到Border");
+        }
+
     }
 }

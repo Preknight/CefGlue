@@ -37,9 +37,10 @@ namespace Xilium.CefGlue.Common
 
         private void SendMouseClickEvent(CefMouseEvent mouseEvent, CefMouseButtonType mouseButton, bool isMouseUp, int clickCount)
         {
+            
             BrowserHost?.SendMouseClickEvent(mouseEvent, mouseButton, isMouseUp, clickCount);
+            
         }
-
         private void HandleLostFocus()
         {
             WithErrorHandling(nameof(HandleLostFocus), () =>

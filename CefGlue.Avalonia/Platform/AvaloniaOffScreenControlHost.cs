@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
@@ -156,6 +156,12 @@ namespace Xilium.CefGlue.Avalonia.Platform
         {
             _lastPointerEvent = e;
             var button = e.AsCefMouseButtonType();
+            var pos = e.GetPosition(_control);
+            var isTransparent = RenderSurface.CheckPointTransparent((int)pos.X, (int)pos.Y);
+            if(!isTransparent)
+            {
+                e.Handled = true;
+            }
             MouseButtonPressed?.Invoke(this, e.AsCefMouseEvent(MousePositionReferential), button, e.ClickCount);
             if (button == CefMouseButtonType.Left)
             {

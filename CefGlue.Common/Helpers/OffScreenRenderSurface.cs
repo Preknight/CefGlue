@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.MemoryMappedFiles;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Xilium.CefGlue.Common.Helpers
@@ -94,7 +95,8 @@ namespace Xilium.CefGlue.Common.Helpers
                 // copy pixels to our buffer, which we will then use to update the bitmap (on the UI thread)
                 unsafe
                 {
-                    Buffer.MemoryCopy(buffer.ToPointer(), imageBuffer.DangerousGetHandle().ToPointer(), (long)imageBuffer.ByteLength, byteCount);
+                    //Buffer.MemoryCopy(buffer.ToPointer(), imageBuffer.DangerousGetHandle().ToPointer(), (long)imageBuffer.ByteLength, byteCount);
+                    Unsafe.CopyBlock(imageBuffer.DangerousGetHandle().ToPointer(), buffer.ToPointer(), (uint)byteCount);
                 }
 
                 return ExecuteInUIThread(() =>
@@ -165,6 +167,11 @@ namespace Xilium.CefGlue.Common.Helpers
         {
             _width = width;
             _height = height;
+        }
+
+        public virtual bool CheckPointTransparent(int x, int y)
+        {
+            return false;
         }
     }
 }

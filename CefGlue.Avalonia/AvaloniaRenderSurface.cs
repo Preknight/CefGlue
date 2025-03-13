@@ -1,4 +1,6 @@
-using System;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -25,13 +27,14 @@ namespace Xilium.CefGlue.Avalonia
         public override void Dispose()
         {
             base.Dispose();
+            _destinationBuffer = IntPtr.Zero;
             _bitmap?.Dispose();
             _bitmap = null;
         }
 
         private Image Image { get; }
 
-        public override bool AllowsTransparency => false;
+        public override bool AllowsTransparency => true;
 
         protected override int BytesPerPixel => 4;
 
@@ -49,6 +52,7 @@ namespace Xilium.CefGlue.Avalonia
             // TODO handle transparency
             _bitmap?.Dispose();
             _bitmap = new WriteableBitmap(new PixelSize(width, height), new Vector(DefaultDpi, DefaultDpi), PixelFormat.Bgra8888, AlphaFormat.Opaque);
+            
             Image.Source = _bitmap;
         }
 
@@ -63,13 +67,47 @@ namespace Xilium.CefGlue.Avalonia
                 Image.InvalidateVisual();
             };
         }
-
+        
         protected override void UpdateBitmap(IntPtr sourceBuffer, int sourceBufferSize, int stride, CefRectangle updateRegion)
         {
             unsafe
             {
-                Buffer.MemoryCopy(sourceBuffer.ToPointer(), _destinationBuffer.ToPointer(), sourceBufferSize, sourceBufferSize);
+                //Buffer.MemoryCopy(sourceBuffer.ToPointer(), _destinationBuffer.ToPointer(), sourceBufferSize, sourceBufferSize);
+                Unsafe.CopyBlock(_destinationBuffer.ToPointer(), sourceBuffer.ToPointer(),
+                    (uint)sourceBufferSize);
             }
+        }
+        public override bool CheckPointTransparent(int x, int y)
+        {
+            return CheckPointTransparent(new Point(x,y));
+        }
+        public bool CheckPointTransparent(Point point)
+        {
+            bool isTransparent = false;
+            unsafe
+            {
+                //只取一个像素，32位，4个字节
+                //int size = 4;//(PixelFormat.Bgra8888.BitsPerPixel + 7) / 8;
+                //var data = Marshal.AllocHGlobal(size);
+                int stride = ((_bitmap.PixelSize.Width * PixelFormat.Bgra8888.BitsPerPixel) + 7) / 8;
+                //var pixelData = new byte[4];
+                //IntPtr checkBuffer = new IntPtr();
+                using(var fb = _bitmap.Lock())
+                {
+                    var addr = fb.Address + (int)point.X * 4 + (int)point.Y * stride;
+                    //Buffer.MemoryCopy(addr.ToPointer(), data.ToPointer(), size, size);
+                    byte B= Marshal.ReadByte(addr);
+                    byte G = Marshal.ReadByte(addr + 1);
+                    byte R = Marshal.ReadByte(addr + 2);
+                    byte A = Marshal.ReadByte(addr + 3);
+                    if(A == 0x00)
+                    {
+                        return true;
+                    }
+                }
+                
+            }
+            return isTransparent;
         }
     }
 }
