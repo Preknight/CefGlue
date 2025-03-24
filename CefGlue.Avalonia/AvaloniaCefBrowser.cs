@@ -26,10 +26,11 @@ namespace Xilium.CefGlue.Avalonia
         {
             return new AvaloniaControl(this, VisualChildren);
         }
-
+        private AvaloniaOffScreenControlHost OffScreenControlHost;
         internal override IOffScreenControlHost CreateOffScreenControlHost()
         {
-            return new AvaloniaOffScreenControlHost(this, VisualChildren);
+            OffScreenControlHost = new AvaloniaOffScreenControlHost(this, VisualChildren);
+            return OffScreenControlHost;
         }
 
         internal override IOffScreenPopupHost CreatePopupHost()
@@ -39,6 +40,15 @@ namespace Xilium.CefGlue.Avalonia
                 PlacementTarget = this
             };
             return new AvaloniaPopup(popup, popup.VisualChildren);
+        }
+
+        public bool CheckPointTransparent(int x, int y)
+        {
+            if(OffScreenControlHost!= null)
+            {
+                return OffScreenControlHost.RenderSurface.CheckPointTransparent(x, y);
+            }
+            return false;
         }
     }
 }

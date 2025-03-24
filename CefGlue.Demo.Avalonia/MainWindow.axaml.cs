@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -16,6 +16,7 @@ namespace Xilium.CefGlue.Demo.Avalonia
 #if WINDOWLESS
             Title += " - OSR mode";
 #endif
+            this.AttachDevTools();
         }
 
         private void InitializeComponent()

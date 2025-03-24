@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -145,6 +147,13 @@ namespace Xilium.CefGlue.Avalonia.Platform
         private void OnPointerReleased(object sender, PointerReleasedEventArgs e)
         {
             var button = e.AsCefMouseButtonType();
+            //var pos = e.GetPosition(_control);
+            //var isTransparent = RenderSurface.CheckPointTransparent((int)pos.X, (int)pos.Y);
+            //Debug.WriteLine("Released 事件 透明" + isTransparent);
+            //if (!isTransparent)
+            //{
+            //    e.Handled = true;
+            //}
             MouseButtonReleased?.Invoke(e.AsCefMouseEvent(MousePositionReferential), button);
             if (button == CefMouseButtonType.Left)
             {
@@ -156,12 +165,13 @@ namespace Xilium.CefGlue.Avalonia.Platform
         {
             _lastPointerEvent = e;
             var button = e.AsCefMouseButtonType();
-            var pos = e.GetPosition(_control);
-            var isTransparent = RenderSurface.CheckPointTransparent((int)pos.X, (int)pos.Y);
-            if(!isTransparent)
-            {
-                e.Handled = true;
-            }
+            //var pos = e.GetPosition(_control);
+            //var isTransparent = RenderSurface.CheckPointTransparent((int)pos.X, (int)pos.Y);
+            //Debug.WriteLine("Pressed 事件 透明" + isTransparent);
+            //if (!isTransparent)
+            //{
+            //    e.Handled = true;
+            //}
             MouseButtonPressed?.Invoke(this, e.AsCefMouseEvent(MousePositionReferential), button, e.ClickCount);
             if (button == CefMouseButtonType.Left)
             {
@@ -294,7 +304,10 @@ namespace Xilium.CefGlue.Avalonia.Platform
         public override bool SetCursor(IntPtr cursorHandle, CefCursorType cursorType)
         {
             var cursor = CursorsProvider.GetCursorFromCefType(cursorType);
-            Dispatcher.UIThread.Post(() => _control.Cursor = cursor);
+            Dispatcher.UIThread.Post(() => {
+                Dispatcher.UIThread.Post(() => _control.Cursor = cursor);
+
+            });
             return true;
         }
 

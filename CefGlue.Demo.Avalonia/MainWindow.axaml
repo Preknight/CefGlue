@@ -9,7 +9,7 @@
             <NativeMenuItem Header="File">
                 <NativeMenuItem.Menu>
                     <NativeMenu>
-                        <NativeMenuItem Header="New Tab" Click="OnNewTabNativeMenuItemClick" />
+                        <NativeMenuItem Header="New Tab" Click="OnNewTabNativeMenuItemClick"/>
                         <NativeMenuItem Header="Open Dev Tools..." Click="OnOpenDevToolsNativeMenuItemClick"/>
                         <NativeMenuItem Header="Evaluate Javascript" Click="OnEvaluateJavascriptNativeMenuItemClick" />
                         <NativeMenuItem Header="Bind Javascript Object" Click="OnBindJavascriptObjectNativeMenuItemClick" />
@@ -28,7 +28,7 @@
                 <MenuItem Header="_Bind Javascript Object" Click="OnBindJavascriptObjectMenuItemClick" />
             </MenuItem>
         </Menu>
-        
+		<Button Cursor="Hand" DockPanel.Dock="Top" Width="100" Height="40"></Button>
         <TabControl Name="tabControl">
         </TabControl>
     </DockPanel>

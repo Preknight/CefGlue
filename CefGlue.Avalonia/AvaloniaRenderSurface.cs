@@ -96,9 +96,9 @@ namespace Xilium.CefGlue.Avalonia
                 {
                     var addr = fb.Address + (int)point.X * 4 + (int)point.Y * stride;
                     //Buffer.MemoryCopy(addr.ToPointer(), data.ToPointer(), size, size);
-                    byte B= Marshal.ReadByte(addr);
-                    byte G = Marshal.ReadByte(addr + 1);
-                    byte R = Marshal.ReadByte(addr + 2);
+                    //byte B= Marshal.ReadByte(addr);
+                    //byte G = Marshal.ReadByte(addr + 1);
+                    //byte R = Marshal.ReadByte(addr + 2);
                     byte A = Marshal.ReadByte(addr + 3);
                     if(A == 0x00)
                     {
